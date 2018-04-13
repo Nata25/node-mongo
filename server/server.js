@@ -7,8 +7,11 @@ const { Todo } = require('./models/todo.js');
 const { User } = require('./models/user.js');
 
 const app = express();
-app.listen(9000, () => {
-  console.log('App is on 9000');
+
+const port = process.env.PORT || '9000';
+
+app.listen(port, () => {
+  console.log(`App is on port ${port}`);
 });
 
 app.use(bodyParser.json());
