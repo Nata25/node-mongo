@@ -24,20 +24,12 @@ app.post('/todos', (req, res) => {
   });
 });
 
-// Todo.find().then(todos => {
-//   console.log('total todos:', todos.length);
-// })
-
-// const newUser = new User({
-//   // email: 'natalya@example.com'
-//   // email: ''
-//   email: '123@gmail.com'
-// });
-
-// newUser.save().then(doc => {
-//   console.log(`New student added: ${doc}.`);
-// }, err => {
-//   console.log(`Unable to save new student: ${err}.`);
-// });
+app.get('/todos', (req, res) => {
+  Todo.find().then(todos => {
+    res.send({ todos })
+  }, e => {
+    res.status(400).send(e);
+  });
+});
 
 module.exports = { app };
