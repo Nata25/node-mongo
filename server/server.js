@@ -3,13 +3,33 @@ const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
 const _ = require('lodash');
 
-const { mongoose } = require('./db/mongoose.js');
 const { Todo } = require('./models/todo.js');
 const { User } = require('./models/user.js');
 
+const env = process.env.NODE_ENV || 'development';
+console.log(env);
+
+if (env === 'development') {
+  process.env.PORT = 9000;
+  process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoApp';
+  console.log(process.env.MONGODB_URI);
+} else if (env === 'test') {
+  process.env.PORT = 9000;
+  process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoAppTest';
+} 
+
+// for production 
+// PORT is set by heroku
+// MONGODB_URI was set on heroku repo configuration
+// db created manually on mLab 
+// available at mongodb://nata-ivanova:3449nat_ml@ds241699.mlab.com:41699/todos-app 
+
+
+const { mongoose } = require('./db/mongoose.js');
+
 const app = express();
 
-const port = process.env.PORT || '9000';
+const port = process.env.PORT;
 
 app.listen(port, () => {
   console.log(`App is on port ${port}`);
