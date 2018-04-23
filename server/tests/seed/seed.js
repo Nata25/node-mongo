@@ -14,7 +14,7 @@ const users = [
     tokens: [
       {
         access: 'auth',
-        token: jwt.sign({ _id: user1ID, access: 'auth'}, '123abc').toString()
+        token: jwt.sign({ _id: user1ID, access: 'auth'}, 'abc123').toString()
       }
     ]
   },
@@ -61,4 +61,4 @@ const todos = [
     });
   };
 
-  module.exports = { todos, populateTodos, pupulateUsers };
+  module.exports = { todos, users, populateTodos, pupulateUsers };
