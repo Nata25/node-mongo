@@ -7,12 +7,10 @@ const { Todo } = require('./models/todo.js');
 const { User } = require('./models/user.js');
 
 const env = process.env.NODE_ENV || 'development';
-console.log(env);
 
 if (env === 'development') {
   process.env.PORT = 9000;
   process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoApp';
-  console.log(process.env.MONGODB_URI);
 } else if (env === 'test') {
   process.env.PORT = 9000;
   process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoAppTest';
@@ -123,6 +121,18 @@ app.patch('/todos/:id', (req, res) => {
     }, error => {
       res.status(400).send();
     });
+});
+
+app.post('/users', (req, res) => {
+  const userData = _.pick(req.body, ['email', 'password']);
+  const user = new User(userData);
+  user.save().then(user => user.generateAuthToken())
+    .then(token => {
+      res.header('x-auth', token).send(user);
+    })
+    .catch(err => {
+      res.status(400).send(err);
+    })
 });
 
 module.exports = { app };
