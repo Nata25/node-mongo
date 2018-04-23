@@ -5,6 +5,7 @@ const _ = require('lodash');
 
 const { Todo } = require('./models/todo.js');
 const { User } = require('./models/user.js');
+const { authenticate } = require('./middleware/authenticate');
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -133,6 +134,10 @@ app.post('/users', (req, res) => {
     .catch(err => {
       res.status(400).send(err);
     })
+});
+
+app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user);
 });
 
 module.exports = { app };
