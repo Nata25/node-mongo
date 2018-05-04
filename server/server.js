@@ -141,7 +141,6 @@ app.post('/users/login', (req, res) => {
   const userData = _.pick(req.body, ['email', 'password']);
   User.findByCredentials(userData.email, userData.password)
     .then(user => {
-      //res.status(200).json({ email: user.email });
       user.generateAuthToken()
         .then(token => {
           res.header('x-auth', token)
@@ -149,7 +148,7 @@ app.post('/users/login', (req, res) => {
         });
     })
     .catch((e) => {
-      console.log(e);
+      //console.log(e);
       res.status(400).send(e);
     })
 

@@ -1,6 +1,7 @@
 const { SHA256 } = require('crypto-js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { ObjectID } = require('mongodb');
 
 // const password = '123abc';
 const password = '123456';
@@ -14,9 +15,16 @@ bcrypt.genSalt(10, (err, salt) => {
 // const hashedPassword = '$2a$10$Dgu6V8YmzCYVT4jbJeojfusKNupzrWeeM9wptnMQRANRRpuS9U0zy';
 const hashedPassword = '$2a$10$zJX8JYlUz4BwXJ2mbRxqbOIPyVbGLtqLD.dTZ7uLYt/mfuaoemVnG';
 
-bcrypt.compare(password, hashedPassword, (err, res) => {
-  console.log('bcrypt.compare', res);
-});
+// bcrypt.compare(password, hashedPassword, (err, res) => {
+//   console.log('bcrypt.compare', res);
+// });
+
+const user1ID = new ObjectID();
+const hash1 = jwt.sign({_id: user1ID, access: 'auth'}, 'abc123').toString();
+
+const user2ID = new ObjectID();
+const hash2 = jwt.sign({_id: user2ID, access: 'auth'}, 'abc123').toString();
+console.log(hash1 === hash2);
 
 // const data = {
 //   id: 10,
