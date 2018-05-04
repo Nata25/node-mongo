@@ -139,20 +139,20 @@ app.post('/users', (req, res) => {
 
 app.post('/users/login', (req, res) => {
   const userData = _.pick(req.body, ['email', 'password']);
-  User.findOne({ email: userData.email })
+  User.findByCredentials(userData.email, userData.password)
     .then(user => {
-      bcrypt.compare(userData.password, user.password, (err, result) => {
-        if (result) {
-          res.status(200).json(user);
-        } else {
-          if (err) {
-            res.status(401).json(err);
-          } else {
-            res.status(401).json(result);
-          }
-        }
-      });
-    });
+      //res.status(200).json({ email: user.email });
+      user.generateAuthToken()
+        .then(token => {
+          res.header('x-auth', token)
+            .send(user);
+        });
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(400).send(e);
+    })
+
 });
 
 app.get('/users/me', authenticate, (req, res) => {
