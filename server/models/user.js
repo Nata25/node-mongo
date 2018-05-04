@@ -49,7 +49,7 @@ UserSchema.methods.generateAuthToken = function() {
     .then(() => token);
 };
 
-// statics are added to the schema 
+// statics are added to the schema itself
 UserSchema.statics.findByToken = function(token) {
   const User = this;
   let decoded;
@@ -65,6 +65,10 @@ UserSchema.statics.findByToken = function(token) {
       'tokens.access': 'auth'
     });
 };
+
+UserSchema.statics.findByCredentials = function(email, password) {
+  
+}
 
 UserSchema.pre('save', function(next) {
   const user = this;

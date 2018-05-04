@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
 const _ = require('lodash');
+const bcrypt = require('bcryptjs');
 
 const { Todo } = require('./models/todo.js');
 const { User } = require('./models/user.js');
@@ -134,6 +135,24 @@ app.post('/users', (req, res) => {
     .catch(err => {
       res.status(400).send(err);
     })
+});
+
+app.post('/users/login', (req, res) => {
+  const userData = _.pick(req.body, ['email', 'password']);
+  User.findOne({ email: userData.email })
+    .then(user => {
+      bcrypt.compare(userData.password, user.password, (err, result) => {
+        if (result) {
+          res.status(200).json(user);
+        } else {
+          if (err) {
+            res.status(401).json(err);
+          } else {
+            res.status(401).json(result);
+          }
+        }
+      });
+    });
 });
 
 app.get('/users/me', authenticate, (req, res) => {
