@@ -49,6 +49,15 @@ UserSchema.methods.generateAuthToken = function() {
     .then(() => token);
 };
 
+UserSchema.methods.removeToken = function(token) {
+  const user = this;
+  return user.update({
+    $pull: {
+      tokens: { token }
+    }
+  });
+}
+
 // statics are added to the schema itself
 UserSchema.statics.findByToken = function(token) {
   const User = this;
